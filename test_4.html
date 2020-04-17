@@ -1,0 +1,120 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+	<meta charset="UTF-8">
+	<meta name="viewport" content="width=device-width, initial-scale=1.0">
+	<meta http-equiv="X-UA-Compatible" content="ie=edge">
+	<title>Document</title>
+	<link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.1.1/css/bootstrap.min.css" integrity="sha384-WskhaSGFgHYWDcbwN70/dfYBj47jz9qbsMId/iRN3ewGhXQFZCSftd1LZCfmhktB" crossorigin="anonymous">
+
+</head>
+<style>
+		h1, h2{
+			text-align: center;
+		}
+		.test{
+			margin: 0 auto;
+			max-width: 800px;
+			/* border: 1px solid; */
+			border-radius: 20px;
+			padding: 10px;
+		}
+		.info{
+			transition: 0.3s;
+			opacity: 0;
+			margin-top: 30px;
+		}
+		.help{
+			transition: 0.3s;
+			text-align: center;
+			margin-top: 30px;
+		}
+	</style>
+<body>
+	<div class="test">
+		<div class="block">
+			<div class="alert alert-info" role="alert">
+					<h4 class="alert-heading">Правила игры</h4>
+					<ul>
+						<li>Найти число от 1 до 100</li>
+						<li>Угадывай</li>
+					</ul>
+			</div>
+			<form>
+				<div class="form-group">
+					<input type="number" class="form-control" id="text" aria-describedby="emailHelp" placeholder="...">
+					<small id="emailHelp" class="form-text text-muted">Впиши число.</small>
+				</div>
+				<button type="button" class="btn btn-info try">Угадать</button>
+			</form>
+		</div>
+		<!-- cards help-->
+			<div class="alert  help" role="alert">
+				<h3></h3>
+			</div>
+		<!-- info -->
+			<div class="alert alert-primary info" role="alert">
+				<h1>Твой результат:</h1>
+				<hr>
+				<ul>	
+					<li>Твой ответ <b id="answer"></b></li>
+					<li>Правильное число <b id="rightnum"></b></li>
+					<li>Твоих попыток <b id="attempts"></b></li>
+				</ul>
+				<form action="">
+					<input type="submit" class="btn btn-info" value ='Заново'></input>
+				</form>
+			</div>
+		
+
+	</div>
+<script>
+	let rand;
+	(()=>{
+		rand = Math.floor(Math.random() * (100 - 1)) + 1;
+	})();
+	const info = document.querySelector('.info');
+	const input = document.querySelector('#text');
+	const button = document.querySelector('.try');
+
+	const rightnum = document.querySelector('#rightnum');
+	const answer = document.querySelector('#answer');
+	const attempts = document.querySelector('#attempts');
+	console.log(rand);
+
+	let count = 0;
+	button.addEventListener('click', ()=>{
+		if(input.value.length < 1) return '';
+		answer.innerHTML += input.value+', ';
+		rightnum.innerHTML = rand;
+		count++;
+		attempts.innerHTML = count;
+		check(input.value, count);
+		if (count == 5 || input.value == rand) {
+			info.style.opacity = 1;
+			button.disabled = true;
+		}
+		input.value = '';
+	});
+
+	function check(params, count) {
+		const help = document.querySelector('.help');
+		const help_h3 = document.querySelector('.help h3');
+		if(params > rand){
+			help.classList.remove('alert-secondary');
+			help.classList.add('alert-warning');
+			help_h3.innerHTML = 'Too high! '+' У тебя осталось '+ (5 - count) +' попыток';
+		}
+		if(params < rand){
+			help.classList.remove('alert-warning');
+			help.classList.add('alert-secondary');
+			help_h3.innerHTML = 'Too Low! '+' У тебя осталось '+ (5 - count) +' попыток';
+		}
+		if (params == rand) {
+			help.classList.add('alert-success');
+			help_h3.innerHTML = 'You found the number!';
+		}
+	};
+</script>
+</body>
+</html>
